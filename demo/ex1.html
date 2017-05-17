@@ -1,0 +1,92 @@
+<dom-module id="lpf-ex1">
+  <template>
+    <style>
+    </style>
+    <h1>Value Sum</h1>
+    <div>Total Sum: [[getListSum(items)]]</div>
+    <div>Filter Sum: [[getNowListSum(items, num)]]</div>
+    <h1>Array Filter</h1>
+    <input type="text" value="{{num::input}}" />
+    <table>
+      <tr>
+        <th>#</th>
+        <th>value</th>
+      </tr>
+      <template is="dom-repeat" items="[[getLt(items, num)]]">
+        <tr>
+          <td>[[autoIndex(index)]]</td>
+          <td>[[item.value]]</td>
+        </tr>
+      </template>
+    </table>
+  </template>
+  <script>
+    customElements.define("lpf-ex1", class extends lazyPointfree(Polymer.Element){
+      static get is() { return "lpf-ex1"; }
+      static get properties() {
+        return {
+          num: {
+            type: Number,
+            value: 0
+          },
+          items: {
+            type: Object,
+            value: function(){
+              let result = [];
+              while(result.length < 100){
+                result.push({
+                  value: Math.random() * 1000
+                });
+              }
+              return result;
+            }
+          }
+        }
+      }
+      static get observers() {
+        return []
+      }
+      constructor() {
+        super();
+      }
+      connectedCallback() {
+        super.connectedCallback();
+      }
+      disconnectedCallback(){
+        super.disconnectedCallback()
+      }
+      ready() {
+        super.ready()
+      }
+
+      get autoIndex(){
+        return this.compose(this.add(1));
+      }
+
+      getLt(items, num){
+        let result = this.compose(
+          this.filter(item=>item.value > num)
+        );
+        return result(items);
+      }
+
+      get getListSum(){
+        return this.compose(
+          this.map(this.prop("value")),
+          this.sum
+        )
+      }
+
+      getNowListSum(items, num){
+        let result = this.compose(
+          this.map(this.prop("value")),
+          this.filter(this.gt(num)),
+          this.sum
+        )(items);
+        return result;
+      }
+
+
+    })
+  </script>
+</dom-module>

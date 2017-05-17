@@ -1,0 +1,99 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`lazy-pointfree`
+
+
+@demo demo/index.html
+-->
+
+<script>
+  const lazyPointfree = (su) => class extends su{
+    compose(...fnArr){
+      return value => fnArr.reduce((curr, fn) => {
+        // console.log(curr);
+        return fn(curr);
+      }, value);
+    }
+
+    split(sep){
+      return str => str.split(sep);
+    }
+
+    prop(p){
+      return obj => obj[p];
+    }
+
+    gt(num){
+      return val => val > num;
+    }
+
+    gte(num){
+      return val => val >= num;
+    }
+
+    lt(num){
+      return val => val < num;
+    }
+
+    lte(num){
+      return val => val <= num;
+    }
+
+    sum(arr){
+      return arr.reduce((curr, num) => Number(curr) + Number(num), 0);
+    }
+
+    max(arr){
+      return arr.reduce((curr, num) => curr < num ? num : curr, 0);
+    }
+
+    min(arr){
+      return arr.reduce((curr, num) => curr > num ? num: curr, 999999999999);
+    }
+
+    isNaN(){
+      return num => isNaN(num);
+    }
+
+    isNull(){
+      return val => val === null;
+    }
+
+    isUndefined(){
+      return val => val === undefined;
+    }
+
+    add(num){
+      return val => Number(val) + num;
+    }
+
+    subtract(num){
+      return val => Number(val) - num;
+    }
+
+    isEmpty(){
+      return val => [this.isNaN, this.isNull, this.isUndefined].every(fn => fn(val));
+    }
+
+    toArray(){
+      return obj => Object.keys(obj).map(key => [{key: key, value:obj[key]}]);
+    }
+
+    filter(fn){
+      return arr => arr.filter(fn);
+    }
+
+    map(fn){
+      return arr => arr.map(fn);
+    }
+
+    every(fn){
+      return arr => arr.every(fn);
+    }
+
+    some(fn){
+      return arr => arr.some(fn);
+    }
+  }
+</script>

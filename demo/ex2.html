@@ -1,0 +1,72 @@
+<dom-module id="lpf-ex2">
+  <template>
+    <style>
+    </style>
+    <h1>String Split And Get Max Num</h1>
+    <input type="text" value="{{str::input}}" />
+    <div>Max Num = [[getMax(str)]]</div>
+    <div>Min Num = [[getMin(str)]]</div>
+    <div>Sum = [[getSum(str)]]</div>
+    <table>
+      <template is="dom-repeat" items="[[strToArray(str)]]">
+        <tr>
+          <td>[[item]]</td>
+        </tr>
+      </template>
+    </table>
+  </template>
+  <script>
+    customElements.define("lpf-ex2", class extends lazyPointfree(Polymer.Element){
+      static get is() { return "lpf-ex2"; }
+      static get properties() {
+        return {
+          str: {
+            type: String,
+            value: ""
+          }
+        }
+      }
+      static get observers() {
+        return []
+      }
+      constructor() {
+        super();
+      }
+      connectedCallback() {
+        super.connectedCallback();
+      }
+      disconnectedCallback(){
+        super.disconnectedCallback()
+      }
+      ready() {
+        super.ready()
+      }
+
+      get strToArray(){
+        return this.compose(
+          this.split(" ")
+        )
+      }
+
+      get getMax(){
+        return this.compose(
+          this.split(" "),
+          this.max
+        )
+      }
+      get getSum() {
+        return this.compose(
+          this.split(" "),
+          this.sum
+        )
+      }
+
+      get getMin(){
+        return this.compose(
+          this.split(" "),
+          this.min
+        )
+      }
+    })
+  </script>
+</dom-module>
