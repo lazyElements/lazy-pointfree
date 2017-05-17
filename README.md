@@ -73,6 +73,9 @@ class extends lazyPointfree(Polymer.Element){
   }
 }
 
+## TODO
+1. 日誌追蹤
+2. 更多更多的方法 😂😂
 
 
 ```
