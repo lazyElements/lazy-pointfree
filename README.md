@@ -67,7 +67,7 @@ class extends lazyPointfree(Polymer.Element){
   //[[sum(items, num)]]
   sumGtNum(items, num){
     return this.compose(
-      this.map(this.gt(num)),
+      this.filter(this.gt(num)),
       this.sum
     )(items)
   }
