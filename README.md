@@ -87,6 +87,8 @@ class extends lazyPointfree(Polymer.Element){
 
 ### `compose(fn1, fn2, ... , fnN) => return [last function] `
 
+### `curry(fn) => function`
+
 ### `split(sep:String|RegExp) => Array[str, ...]`
 
 ### `prop(p:String) => [?]`
