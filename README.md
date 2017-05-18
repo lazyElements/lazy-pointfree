@@ -2,6 +2,10 @@
 
 ## 實驗中 :D , 先從語法糖開始
 
+## Release Note
+
+* Add Curry Method
+
 ## How To Use
 
 ```

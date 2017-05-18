@@ -64,6 +64,8 @@
       }
 
       getLt(items, num){
+        // old
+        // return items.filter(item => item.value > num);
         let result = this.compose(
           this.filter(item=>item.value > num)
         );

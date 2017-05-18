@@ -11,9 +11,22 @@
   const lazyPointfree = (su) => class extends su{
     compose(...fnArr){
       return value => fnArr.reduce((curr, fn) => {
-        // console.log(curr);
-        return fn(curr);
+        try{
+          return fn(curr);
+        }catch(e){
+          throw e;
+        }
       }, value);
+    }
+
+    curry(fn, ..._preArgs) {
+      return (args) => {
+        let concatArgs = [..._preArgs, ...args];
+        if(concatArgs.length >= fn.length){
+          return fn(...concatArgs.slice(0, fn.length));
+        }
+        return this.curry(fn, ...concatArgs);
+      }
     }
 
     split(sep){
