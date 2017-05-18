@@ -60,27 +60,27 @@
       }
 
       get autoIndex(){
-        return this.compose(this.add(1));
+        return this.pipe(this.add(1));
       }
 
       getLt(items, num){
         // old
         // return items.filter(item => item.value > num);
-        let result = this.compose(
+        let result = this.pipe(
           this.filter(item=>item.value > num)
         );
         return result(items);
       }
 
       get getListSum(){
-        return this.compose(
+        return this.pipe(
           this.map(this.prop("value")),
           this.sum
         )
       }
 
       getNowListSum(items, num){
-        let result = this.compose(
+        let result = this.pipe(
           this.map(this.prop("value")),
           this.filter(this.gt(num)),
           this.sum

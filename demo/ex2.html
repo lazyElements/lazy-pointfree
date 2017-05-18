@@ -43,26 +43,26 @@
       }
 
       get strToArray(){
-        return this.compose(
+        return this.pipe(
           this.split(" ")
         )
       }
 
       get getMax(){
-        return this.compose(
+        return this.pipe(
           this.split(" "),
           this.max
         )
       }
       get getSum() {
-        return this.compose(
+        return this.pipe(
           this.split(" "),
           this.sum
         )
       }
 
       get getMin(){
-        return this.compose(
+        return this.pipe(
           this.split(" "),
           this.min
         )

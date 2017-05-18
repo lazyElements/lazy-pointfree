@@ -11,7 +11,7 @@
 ```
 class youDomModule extends lazyPointfree(Polymer.Element){
   get oneParam(){
-    return this.compose(
+    return this.pipe(
       fn1,
       fn2,
       fnN
@@ -19,7 +19,7 @@ class youDomModule extends lazyPointfree(Polymer.Element){
   }
 
   multiParam(param1, param2){
-    return this.compose(
+    return this.pipe(
       fn1,
       fn2,
       fnN
@@ -62,7 +62,7 @@ class extends lazyPointfree(Polymer.Element){
   // 一個參數的情況下(ex1.html)
   // [[sum(items)]]
   get sumAll() {
-    return this.compose(
+    return this.pipe(
       this.sum
     )
   }
@@ -70,7 +70,7 @@ class extends lazyPointfree(Polymer.Element){
   //複合參數的情況下 (此案例將計算大於num之陣列總合)
   //[[sum(items, num)]]
   sumGtNum(items, num){
-    return this.compose(
+    return this.pipe(
       this.filter(this.gt(num)),
       this.sum
     )(items)
@@ -85,9 +85,33 @@ class extends lazyPointfree(Polymer.Element){
 
 ## API Document
 
-### `compose(fn1, fn2, ... , fnN) => return [last function] `
+### `compose(fn1, fn2, ... , fnN) => return [first fn] `
+
+由右至左執行 result <= fn1 <= fn2 <= fnN <= value;
+
+### `pipe(fn1, fn2, ..., fnN) => return [last fn]`
+
+由左至右執行 value => fn1 => fn2 => fnN => result
 
 ### `curry(fn) => function`
+
+將Function Curry化
+
+```
+let fn = (a,b,c) => {
+  return a*b*c;
+}
+
+let curryFn = curry(fn);
+
+
+console.log(curryFn(1, 2, 3)); //allow 6
+console.log(curryFn(1, 2)(3)); //allow 6
+console.log(curryFn(1)(2, 3)); //allow 6
+console.log(curryFn(1)(2)(3)); //allow 6
+console.log("allow", curryFn(1, 2, 3, 4)); //allow 6
+console.log("error", curryFn(1)(2)(3)(4)); //Error
+```
 
 ### `split(sep:String|RegExp) => Array[str, ...]`
 

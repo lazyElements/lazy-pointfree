@@ -9,8 +9,18 @@
 
 <script>
   const lazyPointfree = (su) => class extends su{
-    compose(...fnArr){
+    pipe(...fnArr){
       return value => fnArr.reduce((curr, fn) => {
+        try{
+          return fn(curr);
+        }catch(e){
+          throw e;
+        }
+      }, value);
+    }
+
+    compose(...fnArr){
+      return value => fnArr.reverse().reduce((curr, fn) => {
         try{
           return fn(curr);
         }catch(e){
