@@ -12,6 +12,7 @@
     pipe(...fnArr){
       return value => fnArr.reduce((curr, fn) => {
         try{
+          console.log("run:", fn, fn(curr));
           return fn(curr);
         }catch(e){
           throw e;
@@ -30,7 +31,7 @@
     }
 
     curry(fn, ..._preArgs) {
-      return (args) => {
+      return (...args) => {
         let concatArgs = [..._preArgs, ...args];
         if(concatArgs.length >= fn.length){
           return fn(...concatArgs.slice(0, fn.length));
@@ -39,84 +40,93 @@
       }
     }
 
-    split(sep){
-      return str => str.split(sep);
+    get split(){
+      return this.curry((sep, str) => str.split(sep));
     }
 
-    prop(p){
-      return obj => obj[p];
+    get prop(){
+      return this.curry((prop, obj) => obj[prop]);
     }
 
-    gt(num){
-      return val => val > num;
+    get gt(){
+      return this.curry((a, b) => a > b);
     }
 
-    gte(num){
-      return val => val >= num;
+    get gte(){
+      return this.curry((a, b) => a >= b);
     }
 
-    lt(num){
-      return val => val < num;
+    get lt(){
+      return this.curry((a, b) => a < b);
     }
 
-    lte(num){
-      return val => val <= num;
+    get lte(){
+      return this.curry((a, b) => a <= b);
     }
 
-    sum(arr){
-      return arr.reduce((curr, num) => Number(curr) + Number(num), 0);
+    get sum(){
+      return this.curry(arr => arr.reduce((curr, num) => Number(curr) + Number(num), 0));
     }
 
-    max(arr){
-      return arr.reduce((curr, num) => curr < num ? num : curr, 0);
+    get max(){
+      return this.curry(arr => arr.reduce((curr, num) => curr < num ? num : curr, 0));
     }
 
-    min(arr){
-      return arr.reduce((curr, num) => curr > num ? num: curr, 999999999999);
+    get min(){
+      return this.curry(arr => arr.reduce((curr, num) => curr > num ? num: curr, 999999999999));
     }
 
-    isNaN(){
-      return num => isNaN(num);
+    get isNaN(){
+      return this.curry(num => isNaN(num));
     }
 
-    isNull(){
-      return val => val === null;
+    get isNull(){
+      return this.curry(val => val === null);
     }
 
-    isUndefined(){
-      return val => val === undefined;
+    get isUndefined(){
+      return this.curry(val => val === undefined);
     }
 
-    add(num){
-      return val => Number(val) + num;
+    get add(){
+      return this.curry((a, b) => Number(a) + Number(b));
     }
 
-    subtract(num){
-      return val => Number(val) - num;
+    get subtract(){
+      return this.curry((a, b) => Number(a) - Number(b));
     }
 
-    isEmpty(){
-      return val => [this.isNaN, this.isNull, this.isUndefined].every(fn => fn(val));
+    get isEmpty(){
+      const {isUndefined, isNull, isNaN, curry, pipe, every} = this;
+      return curry((validates, val) => {
+        return pipe(
+          every(validate)
+        )(val);
+      })([isUndefined, isNull, isNaN]);
     }
 
-    toArray(){
-      return obj => Object.keys(obj).map(key => [{key: key, value:obj[key]}]);
+    get toArray(){
+      return this.curry(obj => Object.keys(obj).map(key => [{key: key, value:obj[key]}]));
     }
 
-    filter(fn){
-      return arr => arr.filter(fn);
+    get filter(){
+      return this.curry((fn, arr) => arr.filter(fn));
     }
 
-    map(fn){
-      return arr => arr.map(fn);
+    get map(){
+      return this.curry((fn, arr) => arr.map(fn));
     }
 
-    every(fn){
-      return arr => arr.every(fn);
+    get every(){
+      return this.curry((fn, arr) => arr.every(fn));
     }
 
-    some(fn){
-      return arr => arr.some(fn);
+    get some(){
+      return this.curry((fn, arr) => arr.some(fn));
+    }
+
+    get pick(){
+      
     }
   }
 </script>

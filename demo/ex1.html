@@ -2,9 +2,11 @@
   <template>
     <style>
     </style>
+    <h1>Test</h1>
+    <!-- <div>[[test]]</div> -->
     <h1>Value Sum</h1>
     <div>Total Sum: [[getListSum(items)]]</div>
-    <div>Filter Sum: [[getNowListSum(items, num)]]</div>
+    <!-- <div>Filter Sum: [[getNowListSum(items, num)]]</div>
     <h1>Array Filter</h1>
     <input type="text" value="{{num::input}}" />
     <table>
@@ -18,7 +20,7 @@
           <td>[[item.value]]</td>
         </tr>
       </template>
-    </table>
+    </table> -->
   </template>
   <script>
     customElements.define("lpf-ex1", class extends lazyPointfree(Polymer.Element){
@@ -63,13 +65,18 @@
         return this.pipe(this.add(1));
       }
 
-      getLt(items, num){
-        // old
-        // return items.filter(item => item.value > num);
-        let result = this.pipe(
-          this.filter(item=>item.value > num)
-        );
-        return result(items);
+      get getLt(){
+        const {curry, pipe, filter, map} = this;
+        return curry((items, num) => {
+          return pipe(
+            filter(item => item.value > num),
+            map(item => {
+              let result =Object.assign({},item);
+              result.value *= 500;
+              return result;
+            })
+          )(items);
+        });
       }
 
       get getListSum(){
@@ -80,14 +87,17 @@
       }
 
       getNowListSum(items, num){
-        let result = this.pipe(
-          this.map(this.prop("value")),
-          this.filter(this.gt(num)),
-          this.sum
-        )(items);
-        return result;
+        // let result = this.pipe(
+        //   this.map(this.prop("value")),
+        //   this.filter(this.gt(num)),
+        //   this.sum
+        // )(items);
+        // return result;
       }
 
+      get test(){
+        return this.curry((a,b) => a*b);
+      }
 
     })
   </script>
