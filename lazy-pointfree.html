@@ -9,25 +9,32 @@
 
 <script>
   const lazyPointfree = (su) => class extends su{
+    logger(curr, fn, i, arr) {
+      if(i == 0){
+        console.group("logger Start");
+      }
+      const result = fn(curr);
+      console.log(curr);
+      if(i == arr.length - 1){
+        console.log(result);
+        console.groupEnd();
+      }
+      return result;
+    }
+    pipeLogger(...fnArr){
+      return this.reduce(this.logger, fnArr);
+    }
+
     pipe(...fnArr){
-      return value => fnArr.reduce((curr, fn) => {
-        try{
-          console.log("run:", fn, fn(curr));
-          return fn(curr);
-        }catch(e){
-          throw e;
-        }
-      }, value);
+      return this.reduce((curr, fn) => fn(curr), fnArr);
+    }
+
+    composeLogger(...fnArr){
+      return this.reduce(this.logger, fnArr.reverse());
     }
 
     compose(...fnArr){
-      return value => fnArr.reverse().reduce((curr, fn) => {
-        try{
-          return fn(curr);
-        }catch(e){
-          throw e;
-        }
-      }, value);
+      return this.reduce((curr, fn) => fn(curr), fnArr.reverse());
     }
 
     curry(fn, ..._preArgs) {
@@ -39,63 +46,73 @@
         return this.curry(fn, ...concatArgs);
       }
     }
-
+    // split:: String -> [String]
     get split(){
       return this.curry((sep, str) => str.split(sep));
     }
-
+    // prop:: Object -> a
     get prop(){
       return this.curry((prop, obj) => obj[prop]);
     }
-
+    // gt:: Number -> Number -> Boolean
     get gt(){
       return this.curry((a, b) => a > b);
     }
 
+    // gte:: Number -> Number -> Boolean
     get gte(){
       return this.curry((a, b) => a >= b);
     }
-
+    // lt:: Number -> Number -> Boolean
     get lt(){
-      return this.curry((a, b) => a < b);
+      return this.curry((a, b) => b > a);
     }
-
+    // lte:: Number -> Number -> Boolean
     get lte(){
-      return this.curry((a, b) => a <= b);
+      return this.curry((a, b) => b >= a);
     }
 
+    //eq:: a -> b -> Boolean
+    get eq(){
+      return this.curry((a, b) => a === b);
+    }
+
+    //sum:: [Number] -> Number
     get sum(){
       return this.curry(arr => arr.reduce((curr, num) => Number(curr) + Number(num), 0));
     }
-
+    //max:: [Number] -> Number
     get max(){
       return this.curry(arr => arr.reduce((curr, num) => curr < num ? num : curr, 0));
     }
-
+    //min:: [Number] -> Number
     get min(){
       return this.curry(arr => arr.reduce((curr, num) => curr > num ? num: curr, 999999999999));
     }
-
+    //isNaN:: a -> Boolean
     get isNaN(){
       return this.curry(num => isNaN(num));
     }
-
+    //isNull:: a -> Boolean
     get isNull(){
       return this.curry(val => val === null);
     }
 
+    // isUndefined:: a -> Boolean
     get isUndefined(){
       return this.curry(val => val === undefined);
     }
-
+    //add:: Number -> Number -> Number
     get add(){
       return this.curry((a, b) => Number(a) + Number(b));
     }
 
+    //subtract:: Number -> Number -> Number
     get subtract(){
       return this.curry((a, b) => Number(a) - Number(b));
     }
 
+    //isEmpty:: a -> Boolean
     get isEmpty(){
       const {isUndefined, isNull, isNaN, curry, pipe, every} = this;
       return curry((validates, val) => {
@@ -105,28 +122,45 @@
       })([isUndefined, isNull, isNaN]);
     }
 
+    //toArray: a -> [{key, value}]
     get toArray(){
       return this.curry(obj => Object.keys(obj).map(key => [{key: key, value:obj[key]}]));
     }
 
+    //filter:: (a -> b -> [a]) -> [a] -> [a]
     get filter(){
       return this.curry((fn, arr) => arr.filter(fn));
     }
 
+    //map:: (a -> b -> [a]) -> [a] -> [b]
     get map(){
       return this.curry((fn, arr) => arr.map(fn));
     }
 
+    //reduce:: (a -> b -> c -> [b]) -> [b] -> a -> b
+    get reduce(){
+      return this.curry((fn, arr, def) => arr.reduce(fn, def));
+    }
+
+    //every:: (a -> b -> [b]) -> [b] -> Boolean
     get every(){
       return this.curry((fn, arr) => arr.every(fn));
     }
 
+    //some:: (a -> b -> [b]) -> [b] -> Boolean
     get some(){
       return this.curry((fn, arr) => arr.some(fn));
     }
 
+    //pick:: [String] -> a -> b
     get pick(){
-      
+      return this.curry((mapping, obj) => {
+        let result = {};
+        mapping.forEach(str => {
+          result[str] = obj[str];
+        });
+        return result;
+      })
     }
   }
 </script>

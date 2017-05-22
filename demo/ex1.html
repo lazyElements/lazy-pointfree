@@ -2,25 +2,21 @@
   <template>
     <style>
     </style>
-    <h1>Test</h1>
-    <!-- <div>[[test]]</div> -->
-    <h1>Value Sum</h1>
-    <div>Total Sum: [[getListSum(items)]]</div>
-    <!-- <div>Filter Sum: [[getNowListSum(items, num)]]</div>
     <h1>Array Filter</h1>
     <input type="text" value="{{num::input}}" />
+    <div>Sum: [[getLtItemsSum(num)]] </div>
     <table>
       <tr>
         <th>#</th>
         <th>value</th>
       </tr>
-      <template is="dom-repeat" items="[[getLt(items, num)]]">
+      <template is="dom-repeat" items="[[getLtItems(num)]]">
         <tr>
-          <td>[[autoIndex(index)]]</td>
+          <td>[[add(1, index)]]</td>
           <td>[[item.value]]</td>
         </tr>
       </template>
-    </table> -->
+    </table>
   </template>
   <script>
     customElements.define("lpf-ex1", class extends lazyPointfree(Polymer.Element){
@@ -58,47 +54,29 @@
         super.disconnectedCallback()
       }
       ready() {
-        super.ready()
+        super.ready();
       }
 
-      get autoIndex(){
-        return this.pipe(this.add(1));
-      }
-
-      get getLt(){
-        const {curry, pipe, filter, map} = this;
-        return curry((items, num) => {
-          return pipe(
-            filter(item => item.value > num),
-            map(item => {
-              let result =Object.assign({},item);
-              result.value *= 500;
-              return result;
-            })
+      // getLtItems:: [a] -> Boolean -> [a]
+      get getLtItems() {
+        let {filter} = this;
+        return this.curry((items, num) => {
+          return this.pipe(
+            filter(item => this.lt(num, this.prop("value", item)))
           )(items);
-        });
+        })(this.items);
       }
 
-      get getListSum(){
+      // getLtItemsSum:: (items, num) -> [a] -> [b] -> Number
+      get getLtItemsSum(){
+        //複用性很高，只需要將先前的Function重新組合起來就行了
+        let getValue = item => this.prop("value", item);
         return this.pipe(
-          this.map(this.prop("value")),
+          this.getLtItems,
+          this.map(getValue),
           this.sum
         )
       }
-
-      getNowListSum(items, num){
-        // let result = this.pipe(
-        //   this.map(this.prop("value")),
-        //   this.filter(this.gt(num)),
-        //   this.sum
-        // )(items);
-        // return result;
-      }
-
-      get test(){
-        return this.curry((a,b) => a*b);
-      }
-
     })
   </script>
 </dom-module>

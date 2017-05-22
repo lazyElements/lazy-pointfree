@@ -4,6 +4,10 @@
 
 ## Release Note
 
+* 新增pipeLogger & composeLogger兩種日誌追蹤的方法
+  * 稍微簡短了pipe & compose & pipeLogger & composeLogger的程式
+  * 新增 `eq method`
+  * 將 Document 修改成 `Hindley-Milner 簽名`
 * Add Curry Method
 
 ## How To Use
@@ -80,20 +84,21 @@ class extends lazyPointfree(Polymer.Element){
 ```
 
 ## TODO
-1. 日誌追蹤
-2. 更多更多的方法 😂😂
+1. 更多更多的方法 😂😂
 
 ## API Document
 
-### `compose(fn1, fn2, ... , fnN) => return [first fn] `
+### `composeLogger(fn1, fn2, ... , fnN)`
+### `compose(fn1, fn2, ... , fnN)`
 
 由右至左執行 result <= fn1 <= fn2 <= fnN <= value;
 
-### `pipe(fn1, fn2, ..., fnN) => return [last fn]`
+### `pipeLogger(fn1, fn2, ..., fnN)`
+### `pipe(fn1, fn2, ..., fnN)`
 
 由左至右執行 value => fn1 => fn2 => fnN => result
 
-### `curry(fn) => function`
+### `curry(fn)`
 
 將Function Curry化
 
@@ -113,42 +118,46 @@ console.log("allow", curryFn(1, 2, 3, 4)); //allow 6
 console.log("error", curryFn(1)(2)(3)(4)); //Error
 ```
 
-### `split(sep:String|RegExp) => Array[str, ...]`
+### `split:: String -> String -> [String]`
 
-### `prop(p:String) => [?]`
+### `prop:: a -> String -> b`
 
-### `gt(num:Number) => Boolean`
+### `gt:: Number -> Number -> Boolean`
 
-### `lt(num:Number) => Boolean`
+### `lt:: Number -> Number -> Boolean`
 
-### `gte(num:Number) => Boolean`
+### `gte:: Number -> Number -> Boolean`
 
-### `lte(num:Number) => Boolean`
+### `lte:: Number -> Number -> Boolean`
 
-### `sum(arr:Array[Number]) => Number`
+### `eq:: a -> b -> Boolean`
 
-### `max(arr:Array[Number]) => Number`
+### `sum:: [Number] -> Number`
 
-### `min(arr:Array[Number]) => Number`
+### `max:: [Number] -> Number`
 
-### `add(num:Number) => Number`
+### `min:: [Number] -> Number`
 
-### `subtract(num:Number) => Number`
+### `add:: Number -> Number -> Number`
 
-### `isNaN(val) => Boolean`
+### `subtract:: Number -> Number -> Number`
 
-### `isNull(val) => Boolean`
+### `isNaN:: a -> Boolean`
 
-### `isUndefined(val) => Boolean`
+### `isNull:: a -> Boolean`
 
-### `isEmpty(val) => Boolean`
+### `isUndefined:: a -> Boolean`
 
-### `toArray(Object) => Array[{key, value}]`
+### `isEmpty:: a -> Boolean`
 
-### `filter(fn:Function) => Array`
+### `toArray:: a -> [a]`
 
-### `map(fn:Function) => Array`
+### `filter:: (a -> b -> [a]) -> [a] -> [a]`
 
-### `some(fn:Function) => Boolean`
+### `map:: (a -> b -> [a]) -> [a] -> [b]`
 
-### `eveny(fn:Function) => Boolean`
+### `reduce:: (a -> b -> c -> [b]) -> [b] -> a -> b`
+
+### `some:: (a -> b -> [b]) -> [b] -> Boolean`
+
+### `eveny:: (a -> b -> [b]) -> [b] -> Boolean`
