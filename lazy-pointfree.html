@@ -124,7 +124,7 @@
 
     //toArray: a -> [{key, value}]
     get toArray(){
-      return this.curry(obj => Object.keys(obj).map(key => [{key: key, value:obj[key]}]));
+      return this.curry(obj => Object.keys(obj).map(key => ({key: key, value:obj[key]})));
     }
 
     //filter:: (a -> b -> [a]) -> [a] -> [a]
