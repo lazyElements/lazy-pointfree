@@ -116,9 +116,9 @@
     get isEmpty(){
       const {isUndefined, isNull, isNaN, curry, pipe, every} = this;
       return this.curry((validates, val) => {
-        return pipe(
-          every(validate)
-        )(val);
+        return this.pipe(
+          every((validate) => !validate(val))
+        )(validates);
       })([isUndefined, isNull, isNaN]);
     }
 
