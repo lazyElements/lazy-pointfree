@@ -114,7 +114,7 @@
 
     //isEmpty:: a -> Boolean
     get isEmpty(){
-      const {isUndefined, isNull, isNaN, curry, pipe, every} = this;
+      const {isUndefined, isNull, isNaN, curry, pipe, every, curry} = this;
       return curry((validates, val) => {
         return pipe(
           every(validate)
